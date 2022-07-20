@@ -1,0 +1,34 @@
+version: "3.9"
+    
+services:
+  mqtt:
+    image: eclipse-mosquitto:2.0.14
+    restart: unless-stopped
+    ports:
+      - 1883:1883
+      - 9001:9001
+    networks:
+      - servers_network
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  node-red:
+    image: hmmkay/roadshow:0.2
+    restart: unless-stopped
+    ports:
+      - '1880:1880'
+    volumes:
+      # - roadshow_data_nodered:/data
+      - .\settings.js:/data/settings.js
+      - .\flows.json:/data/flows.json
+    networks:
+      - servers_network
+    # depends_on:
+    #   - db  
+
+# volumes:
+#   roadshow_data_nodered:
+
+networks:
+  servers_network:
+ 
